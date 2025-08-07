@@ -158,7 +158,6 @@
       }
     }
 
-    /* Remove focus highlight on mobile */
     input, select, button, a {
       outline: none;
       -webkit-tap-highlight-color: transparent;
@@ -190,10 +189,10 @@
       100% { transform: rotate(360deg); }
     }
     .type-text {
-      font-size: 13px;
-      font-weight: 500;
+      font-size: 15px;
+      font-weight: bold;
       color: #0078d4;
-      height: 24px;
+      height: 26px;
       white-space: nowrap;
       overflow: hidden;
       border-right: 2px solid #0078d4;
@@ -270,111 +269,173 @@
         <div class="summary" id="priceSummary">
           <div class="line"><span>Original Price:</span><span><s>₹23,450</s></span></div>
           <div class="line"><span>Student Coupon Applied:</span><span id="discountText">No</span></div>
-          <div class="line"><span>Discount %:</span><span id="discountPercent">0%</span></div>
-          <div class="line total"><span>Total to Pay:</span><span id="finalPrice">₹23,450</span></div>
+          <div class="line"><span>Discount Amount:</span><span id="discountAmount">₹0</span></div>
+          <div class="total"><span>Total Payable:</span><span id="totalPrice">₹23,450</span></div>
         </div>
 
-        <div class="invoice-toggle" id="toggleInvoice" onclick="toggleInvoice()">View Invoice Details</div>
-        <div class="invoice" id="invoiceDetails"></div>
+        <div class="invoice-toggle" id="invoiceToggle" onclick="toggleInvoice()">Show Invoice Details</div>
+        <div class="invoice" id="invoiceDetails">
+          <p><strong>Invoice Number:</strong> #MS2025INT01</p>
+          <p><strong>Course Fee:</strong> ₹23,450</p>
+          <p><strong>Discount:</strong> <span id="invoiceDiscount">₹0</span></p>
+          <p><strong>Total Paid:</strong> <span id="invoiceTotal">₹23,450</span></p>
+        </div>
 
-        <a class="pay-now" onclick="startLoading()">Pay Now</a>
+        <a href="#" class="pay-now" id="payNowBtn">Proceed to Pay</a>
       </form>
     </div>
   </div>
 
-  <!-- Fullscreen Loader -->
   <div class="overlay" id="loadingOverlay" style="display:none;">
     <div class="loader"></div>
-    <div class="type-text" id="typedText"></div>
+    <div class="type-text" id="typeText"></div>
   </div>
 
   <script>
-    const validCoupons = ["AA349BN6593MST", "TL934BZMST4502", "kandamas"];
-    const couponInput = document.getElementById("coupon");
-    const summaryBox = document.getElementById("priceSummary");
-    const toggleInvoiceBtn = document.getElementById("toggleInvoice");
-    const couponError = document.getElementById("couponError");
+    // Pricing Data
+    const originalPrice = 23450;
+    const coupons = {
+      'student1000': 1000,
+      'msinternship': 5000
+    };
+
+    let discount = 0;
+
+    // Elements
+    const couponInput = document.getElementById('coupon');
+    const couponError = document.getElementById('couponError');
+    const priceSummary = document.getElementById('priceSummary');
+    const discountText = document.getElementById('discountText');
+    const discountAmount = document.getElementById('discountAmount');
+    const totalPrice = document.getElementById('totalPrice');
+    const invoiceToggle = document.getElementById('invoiceToggle');
+    const invoiceDetails = document.getElementById('invoiceDetails');
+    const invoiceDiscount = document.getElementById('invoiceDiscount');
+    const invoiceTotal = document.getElementById('invoiceTotal');
+    const payNowBtn = document.getElementById('payNowBtn');
+    const loadingOverlay = document.getElementById('loadingOverlay');
+    const typeTextElem = document.getElementById('typeText');
+    const form = document.getElementById('internshipForm');
 
     function applyCoupon() {
-      const code = couponInput.value.trim();
-      const discountText = document.getElementById("discountText");
-      const discountPercent = document.getElementById("discountPercent");
-      const finalPrice = document.getElementById("finalPrice");
+      const code = couponInput.value.trim().toLowerCase();
+      if(code === '') {
+        couponError.style.display = 'block';
+        couponError.textContent = 'Please enter a coupon code.';
+        return;
+      }
 
-      if (validCoupons.includes(code)) {
-        discountText.innerText = "Yes";
-        discountPercent.innerText = "57.38%";
-        finalPrice.innerText = "₹9,999";
-        summaryBox.style.display = "block";
-        toggleInvoiceBtn.style.display = "block";
-        couponError.style.display = "none";
-        setTimeout(() => {
-          summaryBox.scrollIntoView({ behavior: "smooth", block: "center" });
-        }, 100);
+      if(coupons.hasOwnProperty(code)) {
+        discount = coupons[code];
+        couponError.style.display = 'none';
+        discountText.textContent = 'Yes (' + code + ')';
+        discountAmount.textContent = `₹${discount}`;
+        const newTotal = originalPrice - discount;
+        totalPrice.textContent = `₹${newTotal}`;
+        invoiceDiscount.textContent = `₹${discount}`;
+        invoiceTotal.textContent = `₹${newTotal}`;
+        priceSummary.style.display = 'block';
+        invoiceToggle.style.display = 'block';
       } else {
-        couponError.style.display = "block";
-        discountText.innerText = "No";
-        discountPercent.innerText = "0%";
-        finalPrice.innerText = "₹23,450";
-        summaryBox.style.display = "none";
-        toggleInvoiceBtn.style.display = "none";
-        document.getElementById("invoiceDetails").style.display = "none";
+        couponError.style.display = 'block';
+        couponError.textContent = 'Invalid Coupon Code!';
+        discount = 0;
+        discountText.textContent = 'No';
+        discountAmount.textContent = `₹0`;
+        totalPrice.textContent = `₹${originalPrice}`;
+        invoiceDiscount.textContent = `₹0`;
+        invoiceTotal.textContent = `₹${originalPrice}`;
+        priceSummary.style.display = 'block';
+        invoiceToggle.style.display = 'block';
       }
     }
 
     function toggleInvoice() {
-      const invoice = document.getElementById("invoiceDetails");
-      const course = document.getElementById("course").value || "Not Selected";
-      const finalPrice = document.getElementById("finalPrice").innerText;
-
-      invoice.innerHTML = `<strong>INVOICE</strong><br><br>
-        Course Selected: <b>${course}</b><br>
-        Internship Duration: 6 Months<br>
-        Placement Assistance: Included<br>
-        Original Price: ₹23,450<br>
-        Final Payable: ${finalPrice}<br>
-        Coupon Applied: ${couponInput.value.trim()}`;
-
-      invoice.style.display = invoice.style.display === "none" ? "block" : "none";
-
-      if (invoice.style.display === "block") {
-        setTimeout(() => {
-          invoice.scrollIntoView({ behavior: "smooth", block: "center" });
-        }, 100);
+      if(invoiceDetails.style.display === 'none' || invoiceDetails.style.display === '') {
+        invoiceDetails.style.display = 'block';
+        invoiceToggle.textContent = 'Hide Invoice Details';
+      } else {
+        invoiceDetails.style.display = 'none';
+        invoiceToggle.textContent = 'Show Invoice Details';
       }
     }
 
-    function startLoading() {
-      document.getElementById("loadingOverlay").style.display = "flex";
-      typeLoop();
-    }
+    payNowBtn.addEventListener('click', function(e){
+      e.preventDefault();
+      if(!form.checkValidity()) {
+        form.reportValidity();
+        return;
+      }
+      showLoadingAnimation();
+    });
 
-    const messages = [
-      "It is processing...",
+    // Typing Animation Texts
+    const typingTexts = [
+      "Verifying your Microsoft Internship...",
       "Unfortunately, your Bank Server is Down...",
       "Use Any other Device..."
     ];
-    let msgIndex = 0;
+    const typingSpeed = 80; // ms per character
+    const pauseBetweenTexts = 1200; // ms pause after full text typed
+
+    let textIndex = 0;
     let charIndex = 0;
     let isDeleting = false;
 
-    function typeLoop() {
-      const textEl = document.getElementById("typedText");
-      const current = messages[msgIndex];
-      let displayText = current.substring(0, charIndex);
-      textEl.innerText = displayText;
-
-      if (!isDeleting && charIndex < current.length) {
+    function typeAnimation() {
+      const currentText = typingTexts[textIndex];
+      if(!isDeleting) {
+        typeTextElem.textContent = currentText.substring(0, charIndex + 1);
         charIndex++;
-        setTimeout(typeLoop, 80);
-      } else if (isDeleting && charIndex > 0) {
-        charIndex--;
-        setTimeout(typeLoop, 50);
+        if(charIndex === currentText.length) {
+          // Pause then delete text
+          setTimeout(() => {
+            isDeleting = true;
+            setTimeout(typeAnimation, typingSpeed);
+          }, pauseBetweenTexts);
+          return;
+        }
       } else {
-        isDeleting = !isDeleting;
-        if (!isDeleting) msgIndex = (msgIndex + 1) % messages.length;
-        setTimeout(typeLoop, 800);
+        typeTextElem.textContent = currentText.substring(0, charIndex - 1);
+        charIndex--;
+        if(charIndex === 0) {
+          isDeleting = false;
+          textIndex = (textIndex + 1) % typingTexts.length;
+        }
       }
+      setTimeout(typeAnimation, typingSpeed);
+    }
+
+    function showLoadingAnimation() {
+      loadingOverlay.style.display = 'flex';
+
+      // Update font size and bold for type-text:
+      // (done in CSS: font-size:15px; font-weight:bold; color:#0078d4)
+      // So no need to update here, already done
+
+      // Start the typing animation
+      charIndex = 0;
+      isDeleting = false;
+      textIndex = 0;
+      typeAnimation();
+
+      // After some delay (simulate verification), redirect or hide
+      // For demo, after 12 seconds, hide overlay
+      setTimeout(() => {
+        loadingOverlay.style.display = 'none';
+        alert('Registration successful! Thank you.');
+        form.reset();
+        priceSummary.style.display = 'none';
+        invoiceToggle.style.display = 'none';
+        invoiceDetails.style.display = 'none';
+        couponError.style.display = 'none';
+        discountText.textContent = 'No';
+        discountAmount.textContent = `₹0`;
+        totalPrice.textContent = `₹${originalPrice}`;
+        invoiceDiscount.textContent = `₹0`;
+        invoiceTotal.textContent = `₹${originalPrice}`;
+        discount = 0;
+      }, 12000);
     }
   </script>
 </body>
