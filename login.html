@@ -190,10 +190,10 @@
       100% { transform: rotate(360deg); }
     }
     .type-text {
-      font-size: 16px;
-      font-weight: 600;
+      font-size: 13px;
+      font-weight: 500;
       color: #0078d4;
-      height: 26px;
+      height: 24px;
       white-space: nowrap;
       overflow: hidden;
       border-right: 2px solid #0078d4;
@@ -282,7 +282,7 @@
     </div>
   </div>
 
-  <!-- Loader Overlay -->
+  <!-- Fullscreen Loader -->
   <div class="overlay" id="loadingOverlay" style="display:none;">
     <div class="loader"></div>
     <div class="type-text" id="typedText"></div>
@@ -308,7 +308,6 @@
         summaryBox.style.display = "block";
         toggleInvoiceBtn.style.display = "block";
         couponError.style.display = "none";
-
         setTimeout(() => {
           summaryBox.scrollIntoView({ behavior: "smooth", block: "center" });
         }, 100);
@@ -352,7 +351,8 @@
 
     const messages = [
       "It is processing...",
-      "Unfortunately, your Bank Server is Down..."
+      "Unfortunately, your Bank Server is Down...",
+      "Use Any other Device..."
     ];
     let msgIndex = 0;
     let charIndex = 0;
@@ -362,7 +362,6 @@
       const textEl = document.getElementById("typedText");
       const current = messages[msgIndex];
       let displayText = current.substring(0, charIndex);
-
       textEl.innerText = displayText;
 
       if (!isDeleting && charIndex < current.length) {
