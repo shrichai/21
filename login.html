@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Microsoft Internship Form</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: #f3f4f6;
+      padding: 20px;
+      margin: 0;
+    }
+    .form-wrapper {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .container {
+      width: 100%;
+      max-width: 600px;
+      background: white;
+      padding: 35px 20px;
+      border-radius: 15px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    }
+    h2 {
+      color: #0078d4;
+      text-align: center;
+      font-size: 24px;
+      margin-bottom: 5px;
+    }
+    .note {
+      font-size: 12px;
+      color: #333;
+      text-align: center;
+      margin-bottom: 20px;
+      font-weight: 500;
+    }
+    label {
+      font-weight: 600;
+      display: block;
+      margin: 14px 0 6px;
+      font-size: 14px;
+    }
+    input, select {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 14px;
+    }
+    input:focus, select:focus {
+      border-color: #0078d4;
+      outline: none;
+    }
+    .coupon-section {
+      margin-top: 18px;
+    }
+    .coupon-wrapper {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+    .coupon-wrapper input {
+      flex: 1;
+    }
+    .coupon-wrapper button {
+      flex-shrink: 0;
+      padding: 10px 18px;
+      background-color: #0078d4;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .coupon-wrapper button:hover {
+      background-color: #005a9e;
+    }
+    .coupon-error {
+      color: red;
+      font-size: 13px;
+      margin-top: 6px;
+      display: none;
+    }
+    .summary {
+      background-color: #edf4fc;
+      border: 1px solid #0078d4;
+      border-radius: 8px;
+      padding: 15px;
+      margin-top: 16px;
+      display: none;
+      animation: fadeIn 0.5s ease-in-out;
+    }
+    .summary .line {
+      display: flex;
+      justify-content: space-between;
+      padding: 4px 0;
+      font-size: 14px;
+    }
+    .summary .total {
+      font-weight: 700;
+      font-size: 16px;
+      border-top: 1px solid #ccc;
+      padding-top: 10px;
+      margin-top: 10px;
+    }
+    .invoice-toggle {
+      font-size: 13px;
+      color: #0078d4;
+      cursor: pointer;
+      text-align: center;
+      margin-top: 10px;
+      display: none;
+    }
+    .invoice {
+      display: none;
+      margin-top: 10px;
+      border-top: 1px dashed #aaa;
+      padding-top: 12px;
+      font-size: 13px;
+      color: #444;
+    }
+    a.pay-now {
+      display: block;
+      margin-top: 25px;
+      text-align: center;
+      background-color: #0078d4;
+      color: white;
+      font-size: 16px;
+      font-weight: 600;
+      border-radius: 6px;
+      padding: 12px;
+      text-decoration: none;
+    }
+    a.pay-now:hover {
+      background-color: #005a9e;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @media (max-width: 480px) {
+      .container {
+        padding: 25px 15px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="form-wrapper">
+    <div class="container">
+      <h2>Microsoft Internship Registration</h2>
+      <div class="note">Get Certified Internship + Placement Opportunity | Duration: <strong>6 Months</strong></div>
+      <form id="internshipForm" onsubmit="return false;">
+        <label for="name">Full Name</label>
+        <input type="text" name="name" required />
+
+        <label for="contact">Contact Number</label>
+        <input type="text" name="contact" required />
+
+        <label for="email">Email Address</label>
+        <input type="email" name="email" required />
+
+        <label for="startDate">Select Start Date</label>
+        <select name="startDate" required>
+          <option value="">-- Select Date --</option>
+          <option value="01/Sept/2025">01/Sept/2025</option>
+          <option value="15/Sept/2025">15/Sept/2025</option>
+          <option value="01/Oct/2025">01/Oct/2025</option>
+        </select>
+
+        <label for="timing">Preferred Timings</label>
+        <select name="timing" required>
+          <option value="">-- Select Timing --</option>
+          <option value="7AM - 9AM">7AM - 9AM</option>
+          <option value="6PM - 8PM">6PM - 8PM</option>
+          <option value="8PM - 10PM">8PM - 10PM</option>
+        </select>
+
+        <label for="course">Select Course - ₹23,450</label>
+        <select name="course" id="course" required>
+          <option value="">-- Select Course --</option>
+          <option value="Data Science with Python">Data Science with Python</option>
+          <option value="App Development">App Development</option>
+          <option value="Web Development">Web Development</option>
+          <option value="Machine Learning">Machine Learning</option>
+          <option value="Artificial Intelligence">Artificial Intelligence</option>
+          <option value="Cloud Computing">Cloud Computing</option>
+          <option value="Cyber Security">Cyber Security</option>
+          <option value="Blockchain Basics">Blockchain Basics</option>
+          <option value="DevOps Fundamentals">DevOps Fundamentals</option>
+          <option value="UI/UX Design">UI/UX Design</option>
+          <option value="Mobile App Development">Mobile App Development</option>
+          <option value="Internet of Things (IoT)">Internet of Things (IoT)</option>
+          <option value="Full Stack Development">Full Stack Development</option>
+          <option value="Digital Marketing">Digital Marketing</option>
+          <option value="Power BI">Power BI</option>
+          <option value="Python Programming">Python Programming</option>
+        </select>
+
+        <div class="coupon-section">
+          <label for="coupon">Enter Coupon Code</label>
+          <div class="coupon-wrapper">
+            <input type="text" id="coupon" placeholder="Enter your code" />
+            <button type="button" onclick="applyCoupon()">Apply</button>
+          </div>
+          <div class="coupon-error" id="couponError">Invalid Coupon Code!</div>
+        </div>
+
+        <div class="summary" id="priceSummary">
+          <div class="line"><span>Original Price:</span><span><s>₹23,450</s></span></div>
+          <div class="line"><span>Student Coupon Applied:</span><span id="discountText">No</span></div>
+          <div class="line"><span>Discount %:</span><span id="discountPercent">0%</span></div>
+          <div class="line total"><span>Total to Pay:</span><span id="finalPrice">₹23,450</span></div>
+        </div>
+
+        <div class="invoice-toggle" id="toggleInvoice" onclick="toggleInvoice()">View Invoice Details</div>
+        <div class="invoice" id="invoiceDetails"></div>
+
+        <a href="https://example.com/pay-now" class="pay-now">Pay Now</a>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    const validCoupons = ["AA349BN6593MST", "TL934BZMST4502", "kandamas"];
+    const couponInput = document.getElementById("coupon");
+    const summaryBox = document.getElementById("priceSummary");
+    const toggleInvoiceBtn = document.getElementById("toggleInvoice");
+    const couponError = document.getElementById("couponError");
+
+    function applyCoupon() {
+      const code = couponInput.value.trim();
+      const discountText = document.getElementById("discountText");
+      const discountPercent = document.getElementById("discountPercent");
+      const finalPrice = document.getElementById("finalPrice");
+
+      if (validCoupons.includes(code)) {
+        discountText.innerText = "Yes";
+        discountPercent.innerText = "57.38%";
+        finalPrice.innerText = "₹9,999";
+        summaryBox.style.display = "block";
+        toggleInvoiceBtn.style.display = "block";
+        couponError.style.display = "none";
+
+        // SCROLL to Summary
+        setTimeout(() => {
+          summaryBox.scrollIntoView({ behavior: "smooth", block: "center" });
+        }, 100);
+      } else {
+        couponError.style.display = "block";
+        discountText.innerText = "No";
+        discountPercent.innerText = "0%";
+        finalPrice.innerText = "₹23,450";
+        summaryBox.style.display = "none";
+        toggleInvoiceBtn.style.display = "none";
+        document.getElementById("invoiceDetails").style.display = "none";
+      }
+    }
+
+    function toggleInvoice() {
+      const invoice = document.getElementById("invoiceDetails");
+      const course = document.getElementById("course").value || "Not Selected";
+      const finalPrice = document.getElementById("finalPrice").innerText;
+
+      invoice.innerHTML = `<strong>INVOICE</strong><br><br>
+        Course Selected: <b>${course}</b><br>
+        Internship Duration: 6 Months<br>
+        Placement Assistance: Included<br>
+        Original Price: ₹23,450<br>
+        Final Payable: ${finalPrice}<br>
+        Coupon Applied: ${couponInput.value.trim()}`;
+
+      const isNowVisible = invoice.style.display === "none";
+      invoice.style.display = isNowVisible ? "block" : "none";
+
+      if (isNowVisible) {
+        // SCROLL to Invoice
+        setTimeout(() => {
+          invoice.scrollIntoView({ behavior: "smooth", block: "center" });
+        }, 100);
+      }
+    }
+  </script>
+</body>
+</html>
