@@ -11,6 +11,8 @@
       padding: 0;
       box-sizing: border-box;
       font-family: 'Poppins', sans-serif;
+      -webkit-tap-highlight-color: transparent; /* ✅ Prevent blue highlight on tap */
+      outline: none; /* Prevent outline on focus */
     }
 
     html {
@@ -73,6 +75,7 @@
       cursor: pointer;
       margin: 10px;
       transition: 0.3s;
+      -webkit-tap-highlight-color: transparent;
     }
 
     .btn:hover {
@@ -86,12 +89,6 @@
 
     .btn-blue:hover {
       background: #005fa3;
-    }
-
-    /* 🔵 FIXED: Remove focus blue outline */
-    button:focus {
-      outline: none;
-      box-shadow: none;
     }
 
     .section {
