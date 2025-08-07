@@ -73,10 +73,16 @@
       cursor: pointer;
       margin: 10px;
       transition: 0.3s;
+      outline: none;
     }
 
     .btn:hover {
       background: #e6f0ff;
+    }
+
+    .btn:focus {
+      outline: none;
+      box-shadow: none;
     }
 
     .btn-blue {
@@ -88,8 +94,7 @@
       background: #005fa3;
     }
 
-    /* 🔵 FIXED: Remove focus blue outline */
-    button:focus {
+    .btn-blue:focus {
       outline: none;
       box-shadow: none;
     }
@@ -169,6 +174,14 @@
       border-radius: 8px;
       border: 1px solid #ccc;
       font-weight: 500;
+      transition: border 0.3s;
+      outline: none;
+    }
+
+    .modal-content input:focus {
+      border-color: #0078D7;
+      box-shadow: none;
+      outline: none;
     }
 
     .modal-content .btn {
