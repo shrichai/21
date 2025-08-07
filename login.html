@@ -8,11 +8,12 @@
   <style>
     * {
       box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
     }
     body {
       font-family: 'Poppins', sans-serif;
       background-color: #f3f4f6;
-      padding: 20px;
+      padding: 16px;
       margin: 0;
     }
     .form-wrapper {
@@ -22,48 +23,50 @@
     }
     .container {
       width: 100%;
-      max-width: 600px;
+      max-width: 560px;
       background: white;
-      padding: 35px 20px;
-      border-radius: 15px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+      padding: 28px 18px;
+      border-radius: 12px;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.08);
     }
     h2 {
       color: #0078d4;
       text-align: center;
-      font-size: 24px;
+      font-size: 20px;
       margin-bottom: 5px;
     }
     .note {
-      font-size: 12px;
+      font-size: 11px;
       color: #333;
       text-align: center;
-      margin-bottom: 20px;
+      margin-bottom: 16px;
       font-weight: 500;
     }
     label {
       font-weight: 600;
       display: block;
-      margin: 14px 0 6px;
-      font-size: 14px;
+      margin: 12px 0 5px;
+      font-size: 13px;
     }
     input, select {
       width: 100%;
-      padding: 10px;
+      padding: 8px;
       border: 1px solid #ccc;
-      border-radius: 6px;
-      font-size: 14px;
+      border-radius: 5px;
+      font-size: 13px;
+      appearance: none;
+      -webkit-appearance: none;
     }
     input:focus, select:focus {
       border-color: #0078d4;
       outline: none;
     }
     .coupon-section {
-      margin-top: 18px;
+      margin-top: 14px;
     }
     .coupon-wrapper {
       display: flex;
-      gap: 10px;
+      gap: 8px;
       align-items: center;
     }
     .coupon-wrapper input {
@@ -71,47 +74,48 @@
     }
     .coupon-wrapper button {
       flex-shrink: 0;
-      padding: 10px 18px;
+      padding: 8px 14px;
       background-color: #0078d4;
       color: white;
       border: none;
-      border-radius: 6px;
+      border-radius: 5px;
       font-weight: 600;
       cursor: pointer;
+      font-size: 13px;
     }
     .coupon-wrapper button:hover {
       background-color: #005a9e;
     }
     .coupon-error {
       color: red;
-      font-size: 13px;
-      margin-top: 6px;
+      font-size: 12px;
+      margin-top: 5px;
       display: none;
     }
     .summary {
       background-color: #edf4fc;
       border: 1px solid #0078d4;
-      border-radius: 8px;
-      padding: 15px;
-      margin-top: 16px;
+      border-radius: 6px;
+      padding: 12px;
+      margin-top: 14px;
       display: none;
       animation: fadeIn 0.5s ease-in-out;
+      font-size: 13px;
     }
     .summary .line {
       display: flex;
       justify-content: space-between;
-      padding: 4px 0;
-      font-size: 14px;
+      padding: 3px 0;
     }
     .summary .total {
       font-weight: 700;
-      font-size: 16px;
+      font-size: 14px;
       border-top: 1px solid #ccc;
-      padding-top: 10px;
-      margin-top: 10px;
+      padding-top: 8px;
+      margin-top: 8px;
     }
     .invoice-toggle {
-      font-size: 13px;
+      font-size: 12px;
       color: #0078d4;
       cursor: pointer;
       text-align: center;
@@ -120,22 +124,22 @@
     }
     .invoice {
       display: none;
-      margin-top: 10px;
+      margin-top: 8px;
       border-top: 1px dashed #aaa;
-      padding-top: 12px;
-      font-size: 13px;
+      padding-top: 10px;
+      font-size: 12px;
       color: #444;
     }
     a.pay-now {
       display: block;
-      margin-top: 25px;
+      margin-top: 20px;
       text-align: center;
       background-color: #0078d4;
       color: white;
-      font-size: 16px;
+      font-size: 14px;
       font-weight: 600;
       border-radius: 6px;
-      padding: 12px;
+      padding: 10px;
       text-decoration: none;
       cursor: pointer;
     }
@@ -144,17 +148,24 @@
     }
 
     @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(10px); }
+      from { opacity: 0; transform: translateY(8px); }
       to { opacity: 1; transform: translateY(0); }
     }
 
     @media (max-width: 480px) {
       .container {
-        padding: 25px 15px;
+        padding: 22px 14px;
       }
     }
 
-    /* Fullscreen loader overlay */
+    /* Remove focus highlight on mobile */
+    input, select, button, a {
+      outline: none;
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
+    }
+
+    /* Loader Overlay */
     .overlay {
       position: fixed;
       inset: 0;
@@ -164,35 +175,30 @@
       flex-direction: column;
       justify-content: center;
       align-items: center;
-      font-family: 'Poppins', sans-serif;
     }
-
     .loader {
-      border: 6px solid #cce6ff;
-      border-top: 6px solid #0078d4;
+      border: 5px solid #cce6ff;
+      border-top: 5px solid #0078d4;
       border-radius: 50%;
-      width: 60px;
-      height: 60px;
+      width: 50px;
+      height: 50px;
       animation: spin 1s linear infinite;
-      margin-bottom: 25px;
+      margin-bottom: 20px;
     }
-
     @keyframes spin {
       0% { transform: rotate(0deg); }
       100% { transform: rotate(360deg); }
     }
-
     .type-text {
-      font-size: 20px;
+      font-size: 16px;
       font-weight: 600;
       color: #0078d4;
-      height: 30px;
+      height: 26px;
       white-space: nowrap;
       overflow: hidden;
-      border-right: 3px solid #0078d4;
+      border-right: 2px solid #0078d4;
       animation: blink 0.7s step-end infinite;
     }
-
     @keyframes blink {
       50% {
         border-color: transparent;
@@ -276,7 +282,7 @@
     </div>
   </div>
 
-  <!-- Fullscreen Loader -->
+  <!-- Loader Overlay -->
   <div class="overlay" id="loadingOverlay" style="display:none;">
     <div class="loader"></div>
     <div class="type-text" id="typedText"></div>
@@ -330,10 +336,9 @@
         Final Payable: ${finalPrice}<br>
         Coupon Applied: ${couponInput.value.trim()}`;
 
-      const isNowVisible = invoice.style.display === "none";
-      invoice.style.display = isNowVisible ? "block" : "none";
+      invoice.style.display = invoice.style.display === "none" ? "block" : "none";
 
-      if (isNowVisible) {
+      if (invoice.style.display === "block") {
         setTimeout(() => {
           invoice.scrollIntoView({ behavior: "smooth", block: "center" });
         }, 100);
